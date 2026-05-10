@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jellyfish 3D Carousel</title>
+    <style>
+        /* ====== Relevant CSS ====== */
+        .scene, .a3d {
+            display: grid;
+        }
+        .scene {
+            /* prevent scrollbars */
+            overflow: hidden;
+            /* for 3D look; smaller = more extreme effect */
+            perspective: 35em;
+            mask: /* lateral fade */
+                linear-gradient(90deg, #0000, red 20% 80%, #0000);
+        }
+        .a3d {
+            place-self: center; /* middle align */
+            /* don't flatten 3D transformed children of this parent having its own 3D transform */
+            transform-style: preserve-3d;
+            animation: ry 32s linear infinite;
+        }
+        /* simplest y axis rotation */
+        @keyframes ry {
+            to {
+                rotate: y 1turn;
+            }
+        }
+        .card {
+            /* base card width, you may change this */
+            --w: 17.5em;
+            /* compute base angle corresponding to a card */
+            --ba: 1turn / var(--n);
+            grid-area: 1 / 1; /* stack in same one grid cell */
+            width: var(--w);
+            aspect-ratio: 7 / 10;
+            object-fit: cover;
+            border-radius: 1.5em;
+            /* don't want to see back of cards in front of screen plane */
+            backface-visibility: hidden;
+            /* need to use a transform chain here, cannot use separate rotate & translate properties because they'd be applied in wrong order */
+            transform:
+                /* rotate around y axis */
+                rotateY(calc(var(--i) * var(--ba)))
+                /* only after that translate along z axis with minus */
+                translateZ(calc(-1 * (.5 * var(--w) + .5em) / tan(.5 * var(--ba))));
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .a3d {
+                animation-duration: 128s;
+            }
+        }
+
+        /* ====== General page prettifying and layout ====== */
+        html, body {
+            display: grid;
+            height: 100%;
+            margin: 0;
+            background: #fff3ed;
+            font-family: system-ui, sans-serif;
+        }
+        body {
+            place-items: center;
+            gap: 2rem;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            color: #c2410f;
+            text-align: center;
+        }
+        .info {
+            max-width: 600px;
+            text-align: center;
+            color: #9f1239;
+            font-size: 1.1rem;
+            opacity: 0.85;
+        }
+        .scene {
+            width: 100%;
+            max-width: 90vw;
+            height: 500px;
+            display: grid;
+            place-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Jellyfish 3D Carousel</h1>
+    <div class="scene">
+        <div class="a3d" style="--n: 12">
+            <img class="card" src="https://images.unsplash.com/photo-1540968221243-29f5d70540bf?w=280" style="--i: 0" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1596135187959-562c650d98bc?w=280" style="--i: 1" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1628944682084-831f35256163?w=280" style="--i: 2" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1590013330451-3946e83e0392?w=280" style="--i: 3" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1590421959604-741d0eec0a2e?w=280" style="--i: 4" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1572613000712-eadc57acbecd?w=280" style="--i: 5" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1570097192570-4b49a6736f9f?w=280" style="--i: 6" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1620789550663-2b10e0080354?w=280" style="--i: 7" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1617775623669-20bff4ffaa5c?w=280" style="--i: 8" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1548600916-dc8492f8e845?w=280" style="--i: 9" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1573824969595-a76d4365a2e6?w=280" style="--i: 10" alt="Jellyfish">
+            <img class="card" src="https://images.unsplash.com/photo-1633936929709-59991b5fdd72?w=280" style="--i: 11" alt="Jellyfish">
+        </div>
+    </div>
+    <p class="info">
+        Pure CSS 3D rotating carousel • 12 jellyfish photos from Unsplash<br>
+        Hover or wait — it rotates automatically (32-second loop)
+    </p>
+</body>
+</html>
